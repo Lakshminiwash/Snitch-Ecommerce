@@ -1,0 +1,24 @@
+node_modules
+.env
+
+
+
+
+
+# server setup steps for backend
+# 1=> npm init -y
+# 2=> npm i express mongoose and many required packages
+# 3=> create src folder inside backend and app.js file inside src folder
+# 4=> create .env , .gitignore , server.js file inside backend
+# 5=> import express inside app.js and export the app
+# 6=> import app inside server and call it and import connecttodb function from db and call it also
+# 7=> creat config folder inside src and create config file inside config folder and write connecttodb code and export it
+# 8=> now create modals folder and user.model file inside same folder and create scheema 
+# 9=> create validation folder and create authvalidator file inside it and write validation logics
+# 10=> create routes folder and create auth.route file and write auth code
+# 11=> now create authcontrollers and export it to the auth.routes
+# 12=> inside app.js import authRouter from auth.route.js
+
+
+
+
