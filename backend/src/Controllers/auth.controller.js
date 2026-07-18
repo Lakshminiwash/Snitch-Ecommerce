@@ -73,3 +73,8 @@ export const Login = async (req, res) => {
         return res.status(500).json({ message: "server error" })
     }
 }
+
+export const googleCallback = async (req,res)=>{
+    console.log(req.user)
+    res.redirect("http://localhost:5173/")
+}
