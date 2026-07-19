@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import ContinueWithGoogle from '../components/ContinewWithGoogle';
 
 
 const Login = () => {
@@ -35,7 +36,7 @@ const Login = () => {
     }
   return (
     
-        <div className="min-h-screen bg-[#0e0e0e] text-[#e5e2e1] font-sans selection:bg-[#FFD700] selection:text-[#131313] flex flex-col lg:flex-row">
+        <div className="h-screen bg-[#0e0e0e] text-[#e5e2e1] font-sans selection:bg-[#FFD700] selection:text-[#131313] flex flex-col lg:flex-row">
 
             {/* Split Screen - Left Image Section (Hidden on mobile, visible on lg screens) */}
             <div className="hidden lg:flex lg:w-1/2 relative bg-[#131313] items-center justify-center overflow-hidden border-r border-[#1c1b1b]">
@@ -65,7 +66,7 @@ const Login = () => {
             </div>
 
             {/* Split Screen - Right Form Section */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 min-h-screen overflow-y-auto z-10 bg-[#0e0e0e]">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 min-h-screen overflow-y-hidden z-10 bg-[#0e0e0e]">
                 <div className="w-full max-w-md bg-[#131313] lg:bg-transparent p-10 md:p-14 lg:p-6 rounded-2xl lg:rounded-none shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] lg:shadow-none">
                     <div className="mb-12">
                         <h2 className="text-sm uppercase tracking-widest text-[#FFD700] font-medium mb-3">Sign in to Snitch</h2>
@@ -111,6 +112,9 @@ const Login = () => {
                         >
                             Sign In
                         </button>
+
+                        {/* continewWithGoogle  */}
+                        <ContinueWithGoogle/>
 
                         <div className="text-center mt-6">
                             <a href="/register" className="text-sm text-[#999077] hover:text-[#FFD700] transition-colors border-b border-transparent hover:border-[#FFD700] py-0.5">

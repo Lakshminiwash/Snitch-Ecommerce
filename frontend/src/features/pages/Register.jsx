@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import ContinueWithGoogle from '../components/ContinewWithGoogle';
 
 const Register = () => {
 
     const { handleRegister } = useAuth()
     const navigate = useNavigate()
 
-    const [ formData, setFormData ] = useState({
+    const [formData, setFormData] = useState({
         fullName: '',
         contactNumber: '',
         email: '',
@@ -19,7 +20,7 @@ const Register = () => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
-            [ name ]: type === 'checkbox' ? checked : value
+            [name]: type === 'checkbox' ? checked : value
         }));
     };
 
@@ -36,7 +37,7 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0e0e0e] text-[#e5e2e1] font-sans selection:bg-[#FFD700] selection:text-[#131313] flex flex-col lg:flex-row">
+        <div className="h-screen bg-[#0e0e0e] text-[#e5e2e1] font-sans selection:bg-[#FFD700] selection:text-[#131313] flex flex-col lg:flex-row">
 
             {/* Split Screen - Left Image Section (Hidden on mobile, visible on lg screens) */}
             <div className="hidden lg:flex lg:w-1/2 relative bg-[#131313] items-center justify-center overflow-hidden border-r border-[#1c1b1b]">
@@ -66,17 +67,17 @@ const Register = () => {
             </div>
 
             {/* Split Screen - Right Form Section */}
-            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 min-h-screen overflow-y-auto z-10 bg-[#0e0e0e]">
+            <div className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-16 h-screen overflow-y-hidden z-10 bg-[#0e0e0e]">
                 <div className="w-full max-w-md bg-[#131313] lg:bg-transparent p-10 md:p-14 lg:p-6 rounded-2xl lg:rounded-none shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] lg:shadow-none">
-                    <div className="mb-12">
+                    <div className="mb-10">
                         <h2 className="text-sm uppercase tracking-widest text-[#FFD700] font-medium mb-3">Welcome to Snitch</h2>
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tighter text-white">Elevate Your Style</h1>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-8">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                         {/* Full Name */}
                         <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Full Name</label>
+                            <label className="text-sm text-[#d0c6ab] font-medium">Full Name</label>
                             <input
                                 type="text"
                                 name="fullName"
@@ -90,7 +91,7 @@ const Register = () => {
 
                         {/* Contact Number */}
                         <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Contact Number</label>
+                            <label className="text-sm text-[#d0c6ab] font-medium">Contact Number</label>
                             <input
                                 type="tel"
                                 name="contactNumber"
@@ -98,13 +99,13 @@ const Register = () => {
                                 onChange={handleChange}
                                 required
                                 className="bg-[#1c1b1b] lg:bg-[#0e0e0e] text-white border-b-2 border-[#4d4732] focus:border-[#FFD700] outline-none px-4 py-3 transition-colors duration-300 focus:bg-[#201f1f] lg:focus:bg-[#131313]"
-                                placeholder="+91 000-000-0000"  
+                                placeholder="+91 000-000-0000"
                             />
                         </div>
 
                         {/* Email */}
                         <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Email Address</label>
+                            <label className="text-sm text-[#d0c6ab] font-medium">Email Address</label>
                             <input
                                 type="email"
                                 name="email"
@@ -118,7 +119,7 @@ const Register = () => {
 
                         {/* Password */}
                         <div className="flex flex-col">
-                            <label className="text-sm text-[#d0c6ab] mb-2 font-medium">Password</label>
+                            <label className="text-sm text-[#d0c6ab] font-medium">Password</label>
                             <input
                                 type="password"
                                 name="password"
@@ -148,20 +149,19 @@ const Register = () => {
                             <label htmlFor="isSeller" className="text-sm text-[#e5e2e1] group-hover:text-[#FFD700] cursor-pointer select-none transition-colors duration-300">Register as Seller</label>
                         </div>
 
-                        <a href="/api/auth/google"
-                            className="text-sm underline text-[#e5e2e1] group-hover:text-[#FFD700] cursor-pointer select-none transition-colors duration-300"
-                        >Continue with Google</a>
-
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="mt-6 cursor-pointer w-full bg-gradient-to-r from-[#e9c400] to-[#ffd700] text-[#131313] font-bold tracking-wide py-4 px-8 rounded hover:shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
+                            className="mt-6 cursor-pointer w-full bg-gradient-to-r from-[#e9c400] to-[#ffd700] text-[#131313] font-bold tracking-wide py-3 px-8 rounded hover:shadow-[0_0_20px_rgba(255,215,0,0.3)] hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
                         >
                             Sign Up
                         </button>
 
-                        <div className="text-center mt-6">
-                            <a href="/login" className="text-sm text-[#999077] hover:text-[#FFD700] transition-colors border-b border-transparent hover:border-[#FFD700] py-0.5">
+                        {/* continewWithGoogle  */}
+                        <ContinueWithGoogle />
+
+                        <div className="text-center mt-4">
+                            <a href="/login" className="text-sm text-[#999077] hover:text-[#FFD700] transition-colors border-b border-transparent hover:border-[#FFD700] ">
                                 Already have an account? Sign in
                             </a>
                         </div>
