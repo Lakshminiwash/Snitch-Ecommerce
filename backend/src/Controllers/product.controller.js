@@ -47,3 +47,13 @@ export async function getSellerProducts(req,res) {
     })
 }
 
+export async function getAllProtucts(req,res) {
+    const products = productModel.find()
+
+    return res.status(200).json({
+        message:"product fetched successfully",
+        success:true,
+        products
+    })
+}
+

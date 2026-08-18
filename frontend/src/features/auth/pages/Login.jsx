@@ -24,12 +24,13 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            await handleLogin({
-                email: formData.email,
-                password: formData.password
-            })
+            const user = await handleLogin({ email: formData.email, password: formData.password });
+            if(user.role=="buyer"){
+                navigate("/")
+            }else if(user.role == "seller"){
+                navigate("/seller/dashboard")
+            }
 
-            navigate("/")
         } catch (error) {
             console.log("login failed", error)
         }
@@ -44,7 +45,7 @@ const Login = () => {
             />
 
             <div
-                className="min-h-screen flex flex-col lg:flex-row selection:bg-[#C9A96E]/30"
+                className="h-screen flex flex-col lg:flex-row selection:bg-[#C9A96E]/30"
                 style={{ backgroundColor: '#fbf9f6', fontFamily: "'Inter', sans-serif" }}
             >
                 {/* ── LEFT: Editorial Image Panel ── */}
@@ -86,11 +87,10 @@ const Login = () => {
 
                 {/* ── RIGHT: Form Panel ── */}
                 <div
-                    className="w-full lg:w-1/2 flex items-center justify-center min-h-screen px-8 sm:px-14 lg:px-20 py-16"
+                    className="w-full lg:w-1/2 flex items-center justify-center h-screen px-8 sm:px-14 lg:px-20 py-16"
                     style={{ backgroundColor: '#fbf9f6' }}
                 >
                     <div className="w-full max-w-sm">
-
                         {/* Mobile brand mark */}
                         <div className="lg:hidden mb-14">
                             <span

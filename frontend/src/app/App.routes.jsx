@@ -2,12 +2,15 @@ import { createBrowserRouter } from "react-router-dom";
 import Login from "../features/auth/pages/Login";
 import Register from "../features/auth/pages/Register";
 import CreateProduct from "../features/product/pages/CreateProduct";
+import Dashboard from "../features/product/pages/Dashboard";
+import Protected from "../features/auth/components/Protected";
+import Home from "../features/product/pages/Home";
 
 
 export const routes = createBrowserRouter([
     {
         path: "/",
-        element: <h1>hello world</h1>
+        element: <Home/>
     },
     {
         path: "/login",
@@ -18,7 +21,20 @@ export const routes = createBrowserRouter([
         element: <Register />
     },
     {
-        path: "/seller/create-product",
-        element:<CreateProduct/>
+        path: "/seller",
+        children : [ 
+            {
+                path: "/seller/create-product",
+                element: <Protected role = "seller">
+                    <CreateProduct />
+                </Protected>
+            },
+            {
+                path: "/seller/dashboard",
+                element: <Protected role="seller">
+                     <Dashboard />
+                </Protected>
+            }
+        ]
     }
 ])

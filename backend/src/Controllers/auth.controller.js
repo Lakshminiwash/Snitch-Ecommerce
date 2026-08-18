@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/config.js";
 
 async function sendTokenResponse(user, res, message) {
+
     const token = jwt.sign({ id: user._id }, config.JWT_SECRET, { expiresIn: "7d" });
 
     res.cookie("token", token)
@@ -74,9 +75,9 @@ export const Login = async (req, res) => {
     }
 }
 
-export const googleCallback = async (req,res)=>{
+export const googleCallback = async (req, res) => {
     console.log(req.user)
-    const {id,displayName,emails,photos} = req.user
+    const { id, displayName, emails, photos } = req.user
     const email = emails[0].value;
     const profilePic = photos[0].value;
 
@@ -84,21 +85,37 @@ export const googleCallback = async (req,res)=>{
         email
     })
 
-    if(!user){
+    if (!user) {
         user = await userModel.create({
             email,
-            googleId:id,
-            fullName:displayName,
+            googleId: id,
+            fullName: displayName,
         })
     }
 
     const token = jwt.sign({
-        id:user._id
-    },config.JWT_SECRET,{
-        expiresIn:"7d"
+        id: user._id
+    }, config.JWT_SECRET, {
+        expiresIn: "7d"
     })
-    
-    res.cookie("token",token)
+
+    res.cookie("token", token)
 
     res.redirect("http://localhost:5173/")
+}
+
+export async function getMe(req, res) {
+    const user = req.user
+
+    res.status(200).json({
+        message: "user fetched successfully",
+        success: true,
+        user: {
+            id: user._id,
+            email: user.email,
+            contact: user.contact,
+            fullname: user.fullname,
+            role: user.role
+        }
+    })
 }
