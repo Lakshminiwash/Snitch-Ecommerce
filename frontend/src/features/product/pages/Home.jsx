@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useProduct } from '../hooks/useProduct';
 
 const Home = () => {
@@ -8,6 +8,7 @@ const Home = () => {
     const products = useSelector(state => state.product.products)
     const user = useSelector(state => state.auth.user)
     const { handleGetAllProducts } = useProduct();
+    const navigate = useNavigate()
 
     useEffect(() => {
         handleGetAllProducts()
@@ -76,7 +77,9 @@ const Home = () => {
                                     : '/snitch_editorial_warm.png'; // Fallback
 
                                 return (
-                                    <div key={product._id} className="group cursor-pointer flex flex-col">
+                                    <div
+                                        onClick={() => navigate(`/product/${product._id}`)}
+                                        key={product._id} className="group cursor-pointer flex flex-col">
                                         {/* Image Container */}
                                         <div className="aspect-[4/5] overflow-hidden mb-6" style={{ backgroundColor: '#f5f3f0' }}>
                                             <img

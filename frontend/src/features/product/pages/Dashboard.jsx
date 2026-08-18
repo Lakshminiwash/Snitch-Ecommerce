@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useProduct } from '../hooks/useProduct';
 import { useSelector } from 'react-redux';
-import { useEffectEvent } from 'react';
 
 const Dashboard = () => {
 
@@ -11,7 +10,7 @@ const Dashboard = () => {
     const navigate = useNavigate()
     console.log(sellerProducts)
 
-    useEffectEvent(()=>{
+    useEffect(()=>{
         handleGetSellerProduct()
     },[])
 
