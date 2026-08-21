@@ -88,16 +88,16 @@ export async function addProductVarient(req,res) {
         })
     }
 
-    const files = req.files;
-    const images = [];
-    if(files || files.length !== 0){
-        (await Promise.all(files.map(async(file)=>{
+        const files = req.files || [];
+        let images = [];
+        if(files.length > 0){
+            images = await Promise.all(files.map(async(file)=>{
             const image = await uploadFile({
                 buffer:file.buffer,
                 fileName:file.originalname
             })
             return image
-        }))).map(image => image.push(image))
+            }))
     }
 
     const price = req.body.priceAmount

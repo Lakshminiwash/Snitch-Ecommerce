@@ -17,6 +17,6 @@ router.post("/",authenticateSeller,upload.array('images',7),createProductValidat
 router.get("/seller",authenticateSeller,getSellerProducts)
 router.get("/",getAllProtucts)
 router.get("/detail/:id",getProductDetails)
-router.post("/:productId/variants",authenticateSeller,upload.array("image",7),addProductVarient)
+router.post("/:productId/variants",authenticateSeller,upload.array("images",7),addProductVarient)
 
 export default router

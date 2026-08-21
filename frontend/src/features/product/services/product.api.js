@@ -1,13 +1,13 @@
 import axios from "axios"
 
 const productApiInstance = axios.create({
-    baseURL : "/api/products",
-    withCredentials:true
+    baseURL: "/api/products",
+    withCredentials: true
 })
 
 
 export async function createProduct(formData) {
-    const response = await productApiInstance.post("/",formData)
+    const response = await productApiInstance.post("/", formData)
 
     return response.data
 }
@@ -16,7 +16,7 @@ export async function createProduct(formData) {
 export async function getSellerProduct() {
     const response = await productApiInstance.get("/seller")
 
-    return response.data 
+    return response.data
 }
 
 export async function getAllProducts() {
@@ -29,18 +29,20 @@ export async function getProductById(productId) {
     return response.data
 }
 
-export async function addProductVariant(productId,newProductVarient) {
+export async function addProductVariant(productId, newProductVarient) {
     const formData = new FormData()
 
     newProductVarient.images.forEach((image) => {
-        formData.append(`images`,image.file)
+        formData.append("images", image.file)
     });
 
-    formData.append("stock",newProductVarient.stock)
-    formData.append("priceAmount",newProductVarient.priceAmount)
-    formData.append("attributes",JSON.stringify(newProductVarient.attributes))
+    formData.append("stock", newProductVarient.stock)
+    if (newProductVarient.price !== undefined) {
+        formData.append("priceAmount", newProductVarient.price)
+    }
+    formData.append("attributes", JSON.stringify(newProductVarient.attributes))
 
-    const response = await productApiInstance.post(`/${productId}/variants`,formData)
+    const response = await productApiInstance.post(`/${productId}/variants`, formData)
 
     return response.data
 }

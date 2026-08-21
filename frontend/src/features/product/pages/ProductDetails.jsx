@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useProduct } from '../hooks/useProduct';
+import { useCart } from '../../cart/hook/useCart';
 
 const ProductDetail = () => {
     const { productId } = useParams();
     const [product, setProduct] = useState(null);
     const [selectedImage, setSelectedImage] = useState(0);
     const { handleGetProductById } = useProduct();
+    const { handleAddItem } = useCart()
     const [selectedAttributes, setSelectedAttributes] = useState({})
     const navigate = useNavigate();
 
@@ -273,6 +275,12 @@ const ProductDetail = () => {
                                     onMouseLeave={e => {
                                         e.currentTarget.style.backgroundColor = '#1b1c1a';
                                         e.currentTarget.style.color = '#fbf9f6';
+                                    }}
+                                    onClick={() => {
+                                        handleAddItem({
+                                            productId: product._id,
+                                            variantId: activeVariant._id
+                                        })
                                     }}
                                 >
                                     Add to Cart

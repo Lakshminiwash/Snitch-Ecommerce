@@ -30,6 +30,7 @@ export const useProduct = () => {
 
     async function handleAddProductVariant(productId,newProductVariant) {
         const data = await addProductVariant(productId,newProductVariant)
+        console.log(data)
         return data
     }
 
