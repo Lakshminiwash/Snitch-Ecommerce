@@ -6,7 +6,6 @@ import { useProduct } from '../hooks/useProduct';
 const Home = () => {
 
     const products = useSelector(state => state.product.products)
-    const user = useSelector(state => state.auth.user)
     const { handleGetAllProducts } = useProduct();
     const navigate = useNavigate()
 

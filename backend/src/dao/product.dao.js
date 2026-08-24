@@ -1,4 +1,4 @@
-import productModel from "../modals/product.model"
+import productModel from "../modals/product.model.js"
 
 
 export const stockOfVariant = async(productId,variantId)=>{

@@ -8,6 +8,8 @@ import Home from "../features/product/pages/Home";
 import ProductDetail from "../features/product/pages/ProductDetails";
 import SellerProductDetail from "../features/product/pages/SellerProductDetail";
 import AppLayout from "./AppLayout";
+import Cart from "../features/cart/pages/Cart";
+import SellerProductDetails from "../features/product/pages/SellerProductDetail";
 
 
 export const routes = createBrowserRouter([

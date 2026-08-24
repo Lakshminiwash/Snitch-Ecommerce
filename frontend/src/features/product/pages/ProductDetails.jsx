@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useProduct } from '../hooks/useProduct';
 import { useCart } from '../../cart/hook/useCart';
 
@@ -10,7 +10,6 @@ const ProductDetail = () => {
     const { handleGetProductById } = useProduct();
     const { handleAddItem } = useCart()
     const [selectedAttributes, setSelectedAttributes] = useState({})
-    const navigate = useNavigate();
 
     async function fetchProductDetails() {
         try {
