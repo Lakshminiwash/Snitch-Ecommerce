@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux"
-import { addItem, getCart, incrementCartItemApi } from "../services/cart.api"
+import { addItem, createCartOrder, getCart, incrementCartItemApi, verifyCartOrder } from "../services/cart.api"
 import { setCart, incrementCartItem} from "../states/cart.slice"
 
 
@@ -22,5 +22,15 @@ export const useCart = () => {
       dispatch(incrementCartItem({ productId, variantId }))
    }
 
-   return { handleAddItem, handleGetCart, handleIncrementCartItem }
+    async function handleCreateCartOrder() {
+        const data = await createCartOrder()
+         return { ...data.order, keyId: data.keyId }
+    }
+
+    async function handleVerifyCartOrder({ razorpay_order_id, razorpay_payment_id, razorpay_signature }) {
+        const data = await verifyCartOrder({ razorpay_order_id, razorpay_payment_id, razorpay_signature })
+        return data.success
+    }
+
+   return { handleAddItem, handleGetCart, handleIncrementCartItem , handleCreateCartOrder,handleVerifyCartOrder }
 }

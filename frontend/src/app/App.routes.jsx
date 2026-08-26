@@ -6,10 +6,10 @@ import Dashboard from "../features/product/pages/Dashboard";
 import Protected from "../features/auth/components/Protected";
 import Home from "../features/product/pages/Home";
 import ProductDetail from "../features/product/pages/ProductDetails";
-import SellerProductDetail from "../features/product/pages/SellerProductDetail";
 import AppLayout from "./AppLayout";
 import Cart from "../features/cart/pages/Cart";
 import SellerProductDetails from "../features/product/pages/SellerProductDetail";
+import OrderSuccess from "../features/cart/pages/OrderSuccess"
 
 
 export const routes = createBrowserRouter([
@@ -35,6 +35,10 @@ export const routes = createBrowserRouter([
             {
                 path: "/cart",
                 element: <Protected> <Cart /></Protected>
+            },
+            {
+                path:"/order-success",
+                element:<OrderSuccess/>
             },
             {
                 path: "/seller",

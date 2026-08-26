@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useCart } from '../hook/useCart.js'
 import { Link, useNavigate } from 'react-router'
+import { useRazorpay } from "react-razorpay"
 
 /* ─── Inline styles & tokens matching the "Avenue Montaigne" design system ─── */
 const tokens = {
@@ -22,8 +23,10 @@ const tokens = {
 
 const Cart = () => {
     const cart = useSelector(state => state.cart)
-    const { handleGetCart, handleIncrementCartItem } = useCart()
+    const { handleGetCart, handleIncrementCartItem, handleCreateCartOrder, handleVerifyCartOrder } = useCart()
     const navigate = useNavigate()
+    const { error: razorpayError, isLoading: isRazorpayLoading, Razorpay } = useRazorpay()
+    const user = useSelector(state => state.user)
 
     /* Local quantity state — key: cartItem._id, value: number */
     const [quantities, setQuantities] = useState({})
@@ -54,6 +57,50 @@ const Cart = () => {
 
     const formatCurrency = (amount, currency = 'INR') =>
         `${currency} ${Number(amount).toLocaleString('en-IN')}`
+
+
+    async function handleCheckOut() {
+        if (isRazorpayLoading) {
+            return
+        }
+
+        if (razorpayError) {
+            throw new Error(`Razorpay failed to load: ${razorpayError}`)
+        }
+
+        const order = await handleCreateCartOrder()
+
+        if (!order?.keyId) {
+            throw new Error('Razorpay key is missing from the order response')
+        }
+
+        const options = {
+            key: order.keyId,
+            amount: order.amount,
+            currency: order.currency,
+            name: "Snitch",
+            description: "Test transaction",
+            order_id: order.id,
+            handler: async (response) => {
+                const isValid = await handleVerifyCartOrder(response)
+
+                if (isValid) {
+                    navigate(`/order-success?order_id=${response?.razorpay_order_id}`)
+                }
+            },
+            prefill: {
+                name: user?.fullname,
+                email: user?.email,
+                contact: user?.contact,
+            },
+            theme: {
+                color: tokens.primary,
+            }
+        }
+
+        const razorpayInstance = new Razorpay(options);
+        razorpayInstance.open()
+    }
 
     /* ─── Empty state ─── */
     if (!cart?.items?.length) {
@@ -170,18 +217,20 @@ const Cart = () => {
                             {/* ── Cart Item List ── */}
                             <div className="flex flex-col gap-6">
                                 {cart.items.map(item => {
-                                    const { product, variant: variantId, price, product: { _id } } = item
+                                    const { product, variant: variantId, price } = item
+                                    const productId = product._id
+                                    const cartItemId = item._id
                                     const variantDetail = getVariantDetails(product, variantId)
                                     const imageUrl = getDisplayImage(product, variantDetail)
                                     const displayPrice = price ?? variantDetail?.price ?? product?.price
-                                    const qty = quantities[_id] ?? item.quantity ?? 1
+                                    const qty = quantities[cartItemId] ?? item.quantity ?? 1
                                     const attributes = variantDetail?.attributes ?? {}
                                     const stock = variantDetail?.stock
                                     const variantPrice = variantDetail?.price
 
                                     return (
                                         <div
-                                            key={_id}
+                                            key={cartItemId}
                                             className="flex gap-6 md:gap-8 p-6 md:p-8 transition-all duration-300"
                                             style={{ backgroundColor: tokens.surfaceLow }}
                                         >
@@ -281,8 +330,8 @@ const Cart = () => {
                                                         style={{ border: `1px solid ${tokens.outlineVariant}` }}
                                                     >
                                                         <button
-                                                            id={`qty-dec-${_id}`}
-                                                            onClick={() => changeQty(_id, -1)}
+                                                            id={`qty-dec-${cartItemId}`}
+                                                            onClick={() => changeQty(cartItemId, -1)}
                                                             className="w-9 h-9 flex items-center justify-center text-sm font-light transition-colors hover:opacity-60"
                                                             style={{ color: tokens.onSurface, borderRight: `1px solid ${tokens.outlineVariant}` }}
                                                             aria-label="Decrease quantity"
@@ -296,8 +345,8 @@ const Cart = () => {
                                                             {qty}
                                                         </span>
                                                         <button
-                                                            id={`qty-inc-${_id}`}
-                                                            onClick={() => handleIncrementCartItem({ productId: _id, variantId })}
+                                                            id={`qty-inc-${cartItemId}`}
+                                                            onClick={() => handleIncrementCartItem({ productId, variantId })}
                                                             className="w-9 h-9 flex items-center justify-center text-sm font-light transition-colors hover:opacity-60"
                                                             style={{ color: tokens.onSurface, borderLeft: `1px solid ${tokens.outlineVariant}` }}
                                                             aria-label="Increase quantity"
@@ -308,7 +357,7 @@ const Cart = () => {
 
                                                     {/* Remove */}
                                                     <button
-                                                        id={`remove-${_id}`}
+                                                        id={`remove-${cartItemId}`}
                                                         className="text-[10px] uppercase tracking-[0.22em] font-medium transition-all duration-200 hover:underline hover:opacity-70"
                                                         style={{ color: tokens.muted }}
                                                     >
@@ -447,6 +496,7 @@ const Cart = () => {
                                         e.currentTarget.style.backgroundColor = tokens.onSurface
                                         e.currentTarget.style.color = tokens.surface
                                     }}
+                                    onClick={handleCheckOut}
                                 >
                                     Proceed to Checkout
                                 </button>
