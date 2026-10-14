@@ -6,7 +6,10 @@ async function sendTokenResponse(user, res, message) {
 
     const token = jwt.sign({ id: user._id }, config.JWT_SECRET, { expiresIn: "7d" });
 
-    res.cookie("token", token)
+    res.cookie("token", token,{
+        httpOnly:true,
+        secure:process.env.NODE_ENV === "production"
+    })
 
     return res.status(201).json({
         message,
@@ -50,7 +53,6 @@ export const Register = async (req, res) => {
         return res.status(500).json({ message: "server error" });
     }
 };
-
 
 export const Login = async (req, res) => {
     const { email, password } = req.body

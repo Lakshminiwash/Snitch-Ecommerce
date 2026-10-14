@@ -7,8 +7,14 @@ const razorpay = new Razorpay({
 })
 
 export const createOrder = async ({amount,currency="INR"})=>{
+    const numericAmount = Number(amount)
+
+    if (!Number.isFinite(numericAmount) || numericAmount <= 0) {
+        throw new Error("Payment amount must be a positive number")
+    }
+
     const options = {
-        amount : amount*100 , // amount in the smallest unit
+        amount : Math.round(numericAmount * 100), // amount in the smallest unit
         currency,
     }
 

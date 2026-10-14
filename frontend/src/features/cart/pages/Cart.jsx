@@ -30,6 +30,7 @@ const Cart = () => {
 
     /* Local quantity state — key: cartItem._id, value: number */
     const [quantities, setQuantities] = useState({})
+    const [checkoutError, setCheckoutError] = useState('')
 
     useEffect(() => {
         handleGetCart()
@@ -60,46 +61,54 @@ const Cart = () => {
 
 
     async function handleCheckOut() {
-        if (isRazorpayLoading) {
-            return
-        }
+        setCheckoutError('')
 
-        if (razorpayError) {
-            throw new Error(`Razorpay failed to load: ${razorpayError}`)
-        }
-
-        const order = await handleCreateCartOrder()
-
-        if (!order?.keyId) {
-            throw new Error('Razorpay key is missing from the order response')
-        }
-
-        const options = {
-            key: order.keyId,
-            amount: order.amount,
-            currency: order.currency,
-            name: "Snitch",
-            description: "Test transaction",
-            order_id: order.id,
-            handler: async (response) => {
-                const isValid = await handleVerifyCartOrder(response)
-
-                if (isValid) {
-                    navigate(`/order-success?order_id=${response?.razorpay_order_id}`)
-                }
-            },
-            prefill: {
-                name: user?.fullname,
-                email: user?.email,
-                contact: user?.contact,
-            },
-            theme: {
-                color: tokens.primary,
+        try {
+            if (isRazorpayLoading) {
+                return
             }
-        }
 
-        const razorpayInstance = new Razorpay(options);
-        razorpayInstance.open()
+            if (razorpayError) {
+                throw new Error('Razorpay could not be loaded. Please disable blockers and try again.')
+            }
+
+            const order = await handleCreateCartOrder()
+
+            if (!order?.keyId || !order?.id || !Number.isFinite(Number(order.amount)) || Number(order.amount) <= 0) {
+                throw new Error('The payment order is invalid. Please try again.')
+            }
+
+            const options = {
+                key: order.keyId,
+                amount: order.amount,
+                currency: order.currency,
+                name: "Snitch",
+                description: "Order payment",
+                order_id: order.id,
+                handler: async (response) => {
+                    const isValid = await handleVerifyCartOrder(response)
+
+                    if (isValid) {
+                        navigate(`/order-success?order_id=${response?.razorpay_order_id}`)
+                    } else {
+                        setCheckoutError('Payment verification failed. Please contact support.')
+                    }
+                },
+                prefill: {
+                    name: user?.fullname,
+                    email: user?.email,
+                    contact: user?.contact,
+                },
+                theme: {
+                    color: tokens.primary,
+                }
+            }
+
+            const razorpayInstance = new Razorpay(options)
+            razorpayInstance.open()
+        } catch (error) {
+            setCheckoutError(error.response?.data?.message || error.message || 'Unable to start checkout. Please try again.')
+        }
     }
 
     /* ─── Empty state ─── */
@@ -500,6 +509,11 @@ const Cart = () => {
                                 >
                                     Proceed to Checkout
                                 </button>
+                                {checkoutError && (
+                                    <p className="mb-4 text-center text-[10px] uppercase tracking-[0.12em] text-red-700">
+                                        {checkoutError}
+                                    </p>
+                                )}
 
                                 {/* Secondary ghost CTA */}
                                 <button
