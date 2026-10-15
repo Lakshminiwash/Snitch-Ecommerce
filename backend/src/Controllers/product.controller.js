@@ -83,7 +83,7 @@ export async function addProductVarient(req,res) {
 
     if(!product){
         return res.status(404).json({
-            message:"product not found",
+            message:"product not found in your cart",
             success:false
         })
     }
