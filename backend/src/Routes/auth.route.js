@@ -7,8 +7,11 @@ import { authenticateUser } from "../middleWares/auth.middleWare.js";
 
 const router = Router()
 
+// api/auth/register 
 router.post("/register",validateRegisterUser,Register)
+// api/auth/login 
 router.post("/login",validateLoginUser,Login)
+// api/auth/me 
 router.get("/me",authenticateUser,getMe)
 
 
