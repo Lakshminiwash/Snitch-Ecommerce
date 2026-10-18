@@ -103,13 +103,13 @@ const Register = () => {
                                 className="text-[10px] uppercase tracking-[0.22em] mb-4 font-medium"
                                 style={{ color: '#C9A96E' }}
                             >
-                                Welcome to Snitch
+                                Welcome to the Snitch
                             </p>
                             <h1
                                 className="text-[2.6rem] xl:text-5xl font-light leading-[1.1]"
                                 style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1b1c1a' }}
                             >
-                                Elevate Your Style
+                                Elevate Your snitch Style
                             </h1>
                         </div>
 
